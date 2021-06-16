@@ -4,6 +4,7 @@
 <Navbar>
   <%- include('partials/navbar'); -%>
 </Navbar>
+
 <!--Main Container-->
 <div class="container-fluid my-5 d-flex justify-content-center">
   <!--Left Post Section-->
@@ -15,6 +16,7 @@
         placeholder="What's Your on Mind?">
       <button id="upload_widget" class="cloudinary-button btn btn-primary my-3" style="width:100%;">Upload
         files</button>
+        <h5 style="text-align:center;color:gray;">powered via cloudinary</h5>
       <button id="submit-btn" class="btn-danger btn my-3" style="width:100%;">Post</button>
     </div>
     <!--User Id Save -->
@@ -73,9 +75,22 @@
         if (data[i].imageUrl == '' && data[i].textPost != '') {
           feedCard += `
                         <div class="feed-card">
+                          <i class="fa fa-user-circle-o" aria-hidden="true">${data[i].name}</i><span class="date mb-4">${data[i].date.split('T')[0]}</span>
                               <h2 class="feed-text">${data[i].textPost}</h2>
                               <div class="bottom-section">
-                                <button class="like-btn  btn-primary"><i class="icon fa fa-heart" aria-hidden="true">${data[i].likes.length}</i><span class="post-id" style="display:none;">${data[i]._id}</span></button>
+                                <button class="like-btn btn-primary "><i class="icon fa fa-heart" aria-hidden="true">${data[i].likes.length}</i><span class="post-id" style="display:none;">${data[i]._id}</span></button>
+                              </div>
+                        </div>
+                        `
+            
+        }
+        else if (data[i].imageUrl != '' && data[i].textPost == '') {
+          feedCard += `
+                        <div class="feed-card">
+                          <i class="fa fa-user-circle-o" aria-hidden="true">${data[i].name}</i><span class="date mb-4">${data[i].date.split('T')[0]}</span>
+                          <img src="${data[i].imageUrl}" alt="feed_img" class="feed-card-img">
+                              <div class="bottom-section">
+                                <button class="like-btn btn-primary "><i class="icon fa fa-heart" aria-hidden="true">${data[i].likes.length}</i><span class="post-id" style="display:none;">${data[i]._id}</span></button>
                               </div>
                         </div>
                         `
@@ -86,23 +101,25 @@
         else if (data[i].imageUrl != '' && data[i].textPost != '') {
           feedCard += `
                         <div class="feed-card">
+                            <i class="fa fa-user-circle-o" aria-hidden="true">${data[i].name}</i><span class="date mb-4">${data[i].date.split('T')[0]}</span>
                             <img src="${data[i].imageUrl}" alt="feed_img" class="feed-card-img">
                             <h2 class="feed-text my-4">${data[i].textPost}</h2>
-                            <button class="like-btn  btn-primary"><i class="icon fa fa-heart" aria-hidden="true">${data[i].likes.length}</i><span class="post-id" style="display:none;">${data[i]._id}</span></button>
+                            <button class="like-btn btn-primary"><i class="icon fa fa-heart" aria-hidden="true">${data[i].likes.length}</i><span class="post-id" style="display:none;">${data[i]._id}</span></button>
                         </div>
                         `
         }
+        
 
         console.log('data',data[i].likes.length)
         like.push(data[i].likes.length)
       }
-      feedContainer.innerHTML =feedCard
+     feedContainer.innerHTML = feedCard
     }
     else{
       feedContainer.innerHTML =`<h2>No Feeds To Show!Follow Users</h2>`
     }
     
-   
+    
   }
   getPosts();
 
@@ -125,18 +142,20 @@
       body: JSON.stringify(data)
     };
     let res = await fetch(`/feed/`, options);
-    console.log(res, "response from backend for save");
-    console.log("comment saved");
+    // console.log(res, "response from backend for save");
+    // console.log("comment saved");
+    alert("Your Post Saved!!!")
     document.getElementById('text-post').value="";
+    // make imageUrl of cloudinary null after save
+    imageUrl="";
     // calling getPosts() again to dynamically change the feed cards
-    getPosts();
-    setTimeout(()=>{
-      triggerLike();
-    },2000)
+    await getPosts();
+    await triggerLike();
+    
   })
 
  // When a Like Button is Clicked
-  setTimeout(()=>{
+ setTimeout(()=>{
   const likeBtn = document.querySelectorAll('.like-btn')
   const postId = document.querySelectorAll('.post-id')
   console.log(postId)
@@ -155,27 +174,28 @@
    };
    const res = await fetch(`/feed/add_like/${id}`,options);
    
-   console.log(res, "response from backend for save");
-   console.log("like saved");
+  //  console.log(res, "response from backend for save");
+  //  console.log("like saved");
    // function to update like count
-   updateLikeCount(i)
+   
+   await updateLikeCount(i)
    })
  }
- },5000)
- // Update Like Counter 
+ 
+ 
+ },3000)
+  
  const userId = document.getElementById("user-id").innerHTML;
+ // Update Like Counter 
  async function updateLikeCount(i){
   let icon = document.querySelectorAll('.icon')
-  console.log(icon.length)
-  console.log(like[i])
-  console.log(globalPostData[i])
-   getPosts();
-   setTimeout(()=>{
-            triggerLike();
-  },2000)
-  
-  
- }
+  // console.log(icon.length)
+  // console.log(like[i])
+  // console.log(globalPostData[i])
+   await getPosts();
+  await triggerLike();
+  }
+
  // trigger like again without page reload
  async function triggerLike(){
   const likeBtn = document.querySelectorAll('.like-btn')
@@ -196,10 +216,11 @@
    };
    const res = await fetch(`/feed/add_like/${id}`,options);
    
-   console.log(res, "response from backend for save");
-   console.log("like saved");
+  //  console.log(res, "response from backend for save");
+  //  console.log("like saved");
    // 
-   updateLikeCount(i)
+   
+   await updateLikeCount(i)
    })
  }
  }
@@ -236,7 +257,7 @@
 // Calling getUsers() function when page loads for the first time
  getUsers()
 
-setTimeout(()=>{
+
 // Follow-btn click functioning 
 const followBtn = document.querySelectorAll('.follow-btn')
 const followUserId = document.querySelectorAll('.follow-user-id')
@@ -255,16 +276,14 @@ followBtn[i].addEventListener("click",async(e)=>{
    };
    const res = await fetch(`/follow/add_follower/${id}`,options);
    // after successful response run 
-   getUsers();
-   getPosts();
-   setTimeout(()=>{
-      triggerFollowBtn();
-      triggerLike();
-    },2000)
+   await getUsers();
+   await getPosts();
+   await triggerFollowBtn();
+   await triggerLike();
+   
 })
 }
 
-},5000)
 // trigger follow btn
 async function triggerFollowBtn(){
   // Follow-btn click functioning 
@@ -285,9 +304,9 @@ followBtn[i].addEventListener("click",async(e)=>{
    };
    const res = await fetch(`/follow/add_follower/${id}`,options);
    // after successful response run 
-   getUsers();
-   getPosts();
-   triggerLike();
+   await getUsers();
+   await getPosts();
+   await triggerLike();
 })
 }
 
