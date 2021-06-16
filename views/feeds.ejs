@@ -6,11 +6,11 @@
 </Navbar>
 
 <!--Main Container-->
-<div class="container-fluid my-5 d-flex justify-content-center">
+<div class="container-fluid my-5 d-flex " id="feed-main-box">
   <!--Left Post Section-->
   <div class="left-section">
     <!--Top Post Section -->
-    <h2 class="my-3 text-primary display-3 text-center">Post Corner</h2>
+    
     <div class="top-post-section">
       <input id="text-post" class="form-control" type="text" value="" name="textPost"
         placeholder="What's Your on Mind?">
@@ -24,7 +24,7 @@
     <!--Feed Box -->
    
     <!--Feed Container -->
-    <h2 class="my-4 text-primary display-3 text-center">Feed Corner</h2>
+   
     <div class="feed-container">
     </div>
   </div>
@@ -71,11 +71,16 @@
     globalPostData=data
     if (data != "") {
       for (let i = data.length-1; i >= 0; i--) {
-        
+        // To solve problem of user uploading various combinations.(text and image || text || image)
+        // Conditioning used
         if (data[i].imageUrl == '' && data[i].textPost != '') {
           feedCard += `
                         <div class="feed-card">
-                          <i class="fa fa-user-circle-o" aria-hidden="true">${data[i].name}</i><span class="date mb-4">${data[i].date.split('T')[0]}</span>
+                          <i class="fa fa-user-circle-o" style="font-size:1.5rem;" aria-hidden="true">${data[i].name}</i>
+                          <span class="date">
+                            <i style="float:right;margin-top:-25px;" 
+                            class="fa fa-calendar" aria-hidden="true">
+                            ${data[i].date.split('T')[0]}</i></span>
                               <h2 class="feed-text">${data[i].textPost}</h2>
                               <div class="bottom-section">
                                 <button class="like-btn btn-primary "><i class="icon fa fa-heart" aria-hidden="true">${data[i].likes.length}</i><span class="post-id" style="display:none;">${data[i]._id}</span></button>
@@ -87,7 +92,11 @@
         else if (data[i].imageUrl != '' && data[i].textPost == '') {
           feedCard += `
                         <div class="feed-card">
-                          <i class="fa fa-user-circle-o" aria-hidden="true">${data[i].name}</i><span class="date mb-4">${data[i].date.split('T')[0]}</span>
+                          <i class="fa fa-user-circle-o" style="font-size:1.5rem;" aria-hidden="true">${data[i].name}</i>
+                          <span class="date ">
+                            <i style="float:right;margin-top:-25px;" 
+                            class="fa fa-calendar" aria-hidden="true">
+                            ${data[i].date.split('T')[0]}</i></span>
                           <img src="${data[i].imageUrl}" alt="feed_img" class="feed-card-img">
                               <div class="bottom-section">
                                 <button class="like-btn btn-primary "><i class="icon fa fa-heart" aria-hidden="true">${data[i].likes.length}</i><span class="post-id" style="display:none;">${data[i]._id}</span></button>
@@ -101,7 +110,13 @@
         else if (data[i].imageUrl != '' && data[i].textPost != '') {
           feedCard += `
                         <div class="feed-card">
-                            <i class="fa fa-user-circle-o" aria-hidden="true">${data[i].name}</i><span class="date mb-4">${data[i].date.split('T')[0]}</span>
+                            <i class="fa fa-user-circle-o" style="font-size:1.5rem;"
+                            aria-hidden="true">${data[i].name}
+                            </i>
+                            <span class="date ">
+                            <i style="float:right;margin-top:-25px;" 
+                            class="fa fa-calendar" aria-hidden="true">
+                            ${data[i].date.split('T')[0]}</i></span>
                             <img src="${data[i].imageUrl}" alt="feed_img" class="feed-card-img">
                             <h2 class="feed-text my-4">${data[i].textPost}</h2>
                             <button class="like-btn btn-primary"><i class="icon fa fa-heart" aria-hidden="true">${data[i].likes.length}</i><span class="post-id" style="display:none;">${data[i]._id}</span></button>
