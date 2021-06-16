@@ -1,0 +1,300 @@
+<%- include('partials/header'); -%>
+
+
+<Navbar>
+  <%- include('partials/navbar'); -%>
+</Navbar>
+<!--Main Container-->
+<div class="container-fluid my-5 d-flex justify-content-center">
+  <!--Left Post Section-->
+  <div class="left-section">
+    <!--Top Post Section -->
+    <h2 class="my-3 text-primary display-3 text-center">Post Corner</h2>
+    <div class="top-post-section">
+      <input id="text-post" class="form-control" type="text" value="" name="textPost"
+        placeholder="What's Your on Mind?">
+      <button id="upload_widget" class="cloudinary-button btn btn-primary my-3" style="width:100%;">Upload
+        files</button>
+      <button id="submit-btn" class="btn-danger btn my-3" style="width:100%;">Post</button>
+    </div>
+    <!--User Id Save -->
+    <h2 id="user-id" style="display:none;"><%= user._id %></h2>
+    <!--Feed Box -->
+   
+    <!--Feed Container -->
+    <h2 class="my-4 text-primary display-3 text-center">Feed Corner</h2>
+    <div class="feed-container">
+    </div>
+  </div>
+  <!--Right Section -->
+  <div class="right-container">
+    <h2 style="text-align:center;">Follow Others:</h2>
+  <div class="right-section d-flex flex-direction-column align-items-center">
+      <h2 class="right-title text-align-center">Follow Other Users</h2>
+  </div>
+  </div>
+</div>
+
+<!--Custom JavaScript-->
+<!--Cloudinary Image Uploda Widget-->
+<script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+  let imageUrl = ""
+  var myWidget = cloudinary.createUploadWidget({
+    cloudName: 'dtqzhg98l',
+    uploadPreset: 'vdkuxmpd'
+  }, (error, result) => {
+    if (!error && result && result.event === "success") {
+      console.log('Done! Here is the image info: ', result.info);
+      imageUrl = result.info.secure_url
+    }
+  })
+
+  document.getElementById("upload_widget").addEventListener("click", function () {
+    myWidget.open();
+  }, false);
+
+// When Page Loads
+ // getPosts() function is called first time
+ const feedContainer = document.querySelector(".feed-container")
+ let like=[]
+ let globalPostData=""
+  async function getPosts() {
+    let feedCard="";
+    feedContainer.innerHTML="";
+    const res = await fetch('/feed/')
+    const data = await res.json()
+    console.log('data'+data.length);
+    globalPostData=data
+    if (data != "") {
+      for (let i = data.length-1; i >= 0; i--) {
+        
+        if (data[i].imageUrl == '' && data[i].textPost != '') {
+          feedCard += `
+                        <div class="feed-card">
+                              <h2 class="feed-text">${data[i].textPost}</h2>
+                              <div class="bottom-section">
+                                <button class="like-btn  btn-primary"><i class="icon fa fa-heart" aria-hidden="true">${data[i].likes.length}</i><span class="post-id" style="display:none;">${data[i]._id}</span></button>
+                              </div>
+                        </div>
+                        `
+            
+        }
+
+        /*Case when text is not entered by user */
+        else if (data[i].imageUrl != '' && data[i].textPost != '') {
+          feedCard += `
+                        <div class="feed-card">
+                            <img src="${data[i].imageUrl}" alt="feed_img" class="feed-card-img">
+                            <h2 class="feed-text my-4">${data[i].textPost}</h2>
+                            <button class="like-btn  btn-primary"><i class="icon fa fa-heart" aria-hidden="true">${data[i].likes.length}</i><span class="post-id" style="display:none;">${data[i]._id}</span></button>
+                        </div>
+                        `
+        }
+
+        console.log('data',data[i].likes.length)
+        like.push(data[i].likes.length)
+      }
+      feedContainer.innerHTML =feedCard
+    }
+    else{
+      feedContainer.innerHTML =`<h2>No Feeds To Show!Follow Users</h2>`
+    }
+    
+   
+  }
+  getPosts();
+
+// When a Post is submitted 
+// @desc: Making an asynchronous post request to update database 
+  const submitBtn = document.getElementById('submit-btn');
+
+  submitBtn.addEventListener("click", async (e) => {
+    const textPost = document.getElementById('text-post').value;
+    console.log("imgurl" + imageUrl)
+    let data = {
+      textPost,
+      imageUrl
+    }
+    let options = {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    };
+    let res = await fetch(`/feed/`, options);
+    console.log(res, "response from backend for save");
+    console.log("comment saved");
+    document.getElementById('text-post').value="";
+    // calling getPosts() again to dynamically change the feed cards
+    getPosts();
+    setTimeout(()=>{
+      triggerLike();
+    },2000)
+  })
+
+ // When a Like Button is Clicked
+  setTimeout(()=>{
+  const likeBtn = document.querySelectorAll('.like-btn')
+  const postId = document.querySelectorAll('.post-id')
+  console.log(postId)
+ for(let i=0;i<likeBtn.length;i++){
+   likeBtn[i].addEventListener("click",async(e)=>{
+     console.log(postId[i].innerHTML)
+   let id=postId[i].innerHTML;
+   let data={id}
+   
+   let options = {
+     method: 'PUT',
+     headers: {
+       'Content-type': 'application/json'
+     },
+     body: JSON.stringify(data)
+   };
+   const res = await fetch(`/feed/add_like/${id}`,options);
+   
+   console.log(res, "response from backend for save");
+   console.log("like saved");
+   // function to update like count
+   updateLikeCount(i)
+   })
+ }
+ },5000)
+ // Update Like Counter 
+ const userId = document.getElementById("user-id").innerHTML;
+ async function updateLikeCount(i){
+  let icon = document.querySelectorAll('.icon')
+  console.log(icon.length)
+  console.log(like[i])
+  console.log(globalPostData[i])
+   getPosts();
+   setTimeout(()=>{
+            triggerLike();
+  },2000)
+  
+  
+ }
+ // trigger like again without page reload
+ async function triggerLike(){
+  const likeBtn = document.querySelectorAll('.like-btn')
+  const postId = document.querySelectorAll('.post-id')
+  console.log(postId)
+ for(let i=0;i<likeBtn.length;i++){
+   likeBtn[i].addEventListener("click",async(e)=>{
+     console.log(postId[i].innerHTML)
+   let id=postId[i].innerHTML;
+   let data={id}
+   
+   let options = {
+     method: 'PUT',
+     headers: {
+       'Content-type': 'application/json'
+     },
+     body: JSON.stringify(data)
+   };
+   const res = await fetch(`/feed/add_like/${id}`,options);
+   
+   console.log(res, "response from backend for save");
+   console.log("like saved");
+   // 
+   updateLikeCount(i)
+   })
+ }
+ }
+
+ // User Section 
+ const rightSection = document.querySelector('.right-section')
+ 
+ async function getUsers(){
+  let userCard=''
+    rightSection.innerHTML = ''
+   const res = await fetch('/follow/')
+   const data = await res.json();
+   console.log(data);
+   for(let i=0;i<data.length;i++){
+    console.log("here")
+     if(data[i]._id != userId )
+       userCard +=`
+       <div class="user-card">
+        <button class="follow-btn btn btn-info">
+          <i class="fa fa-plus" aria-hidden="true" type="button">Follow</i>
+          <span  class="follow-user-id" style="display:none;">${data[i]._id}</span>
+        </button>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQeLJOzTAW4sn22WgYxepEVozqjZWtyqLGJPQ&usqp=CAU"
+             alt="profile_img">
+        <h2>${data[i].name}</h2>
+      </div>
+       `
+     }
+   
+   rightSection.innerHTML= userCard;
+   getPosts();
+   triggerFollowBtn();
+ }
+// Calling getUsers() function when page loads for the first time
+ getUsers()
+
+setTimeout(()=>{
+// Follow-btn click functioning 
+const followBtn = document.querySelectorAll('.follow-btn')
+const followUserId = document.querySelectorAll('.follow-user-id')
+for(let i=0;i<followBtn.length;i++){
+followBtn[i].addEventListener("click",async(e)=>{
+  console.log("click happended")
+   let id=followUserId[i].innerHTML;
+   let data={id}
+   
+   let options = {
+     method: 'PUT',
+     headers: {
+       'Content-type': 'application/json'
+     },
+     body: JSON.stringify(data)
+   };
+   const res = await fetch(`/follow/add_follower/${id}`,options);
+   // after successful response run 
+   getUsers();
+   getPosts();
+   setTimeout(()=>{
+      triggerFollowBtn();
+      triggerLike();
+    },2000)
+})
+}
+
+},5000)
+// trigger follow btn
+async function triggerFollowBtn(){
+  // Follow-btn click functioning 
+const followBtn = document.querySelectorAll('.follow-btn')
+const followUserId = document.querySelectorAll('.follow-user-id')
+for(let i=0;i<followBtn.length;i++){
+followBtn[i].addEventListener("click",async(e)=>{
+  console.log("click happended")
+   let id=followUserId[i].innerHTML;
+   let data={id}
+   
+   let options = {
+     method: 'PUT',
+     headers: {
+       'Content-type': 'application/json'
+     },
+     body: JSON.stringify(data)
+   };
+   const res = await fetch(`/follow/add_follower/${id}`,options);
+   // after successful response run 
+   getUsers();
+   getPosts();
+   triggerLike();
+})
+}
+
+}
+
+</script>
+
+</body>
+
+</html>
