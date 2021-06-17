@@ -1,16 +1,19 @@
 [Visit our website here](https://dsc-twitter-clone.herokuapp.com/)
 <div align="center">
-<h2 style="text-align:center;font-size:53px;color:red"><span style="color:blue">Twiiter</span>Clone
+<h2 style="text-align:center;font-size:53px;color:red"><span style="color:blue">Twitter</span>Clone
 
 </h2>
 </div>
 
 
-<p style="text-align:center;font-size:1.5rem;">Mini social media app(like twitter) that lets the user signup, login, and then post anything on their mind.
-</p>
+<h2 style="text-align:center;font-size:2rem;">Mini social media app(like twitter) that lets the user signup, login, and then post anything on their mind.
+</h2>
 
 <div align="center">
-  <img src="https://drive.google.com/file/d/1qVf4GLliu14n8Rv-79oaFHXu4lZorggm/view?usp=sharing" alt="Twitter Clone">
+  <img src="snips/one.png" alt="Twitter Clone">
+</div>
+<div align="center">
+  <img src="snips/two.png" alt="Twitter Clone">
 </div>
 
 
