@@ -1,37 +1,37 @@
 <%- include('partials/header'); -%>
 
 
-<Navbar>
+
   <%- include('partials/navbar'); -%>
-</Navbar>
+
+<!--User Id(Utility Data) -->
+<h2 id="user-id" style="display:none;"><%= user._id %></h2>
 
 <!--Main Container-->
-<div class="container-fluid my-5 d-flex " id="feed-main-box">
+<div class="container d-flex " id="feed-main-box">
   <!--Left Post Section-->
   <div class="left-section">
     <!--Top Post Section -->
-    
-    <div class="top-post-section">
-      <input id="text-post" class="form-control" type="text" value="" name="textPost"
-        placeholder="Write Something here?">
-      <button id="upload_widget" class="cloudinary-button btn btn-primary my-3" style="width:100%;">Upload
-        files</button>
-        <h5 style="text-align:center;color:gray;">powered via cloudinary</h5>
-      <button id="submit-btn" class="btn-danger btn my-3" style="width:100%;">Post</button>
-    </div>
-    <!--User Id Save -->
-    <h2 id="user-id" style="display:none;"><%= user._id %></h2>
-    <!--Feed Box -->
-   
+    <h2 style="font-size:2.3rem;font-weight:800;">Feeds</h2>
+    <hr />
     <!--Feed Container -->
-   
-    <div class="feed-container">
+   <div class="feed-container">
+    </div>
+    <div class="top-post-section">
+      <textarea id="text-post"  value="" name="textPost" rows="2" cols="80">
+        Write Something Here
+      </textarea>
+      <div class="bottom-section" style="display:flex;justify-content:space-between;padding:10px;">
+        <i id="upload_widget" style="color:black;font-size:1.5rem;background:none;" type="button" class="fa fa-file-image-o cloudinary-button" aria-hidden="true"></i>
+        <button id="submit-btn" class="btn btn-primary" style="width:30%;">Post</button>
+      </div>
     </div>
   </div>
   <!--Right Section -->
   <div class="right-container">
-    <h2 style="text-align:center;">Follow Others:</h2>
-  <div class="right-section d-flex flex-direction-column align-items-center">
+    <h2 style="font-size:2rem;font-weight:800;">Follow Others</h2>
+    <hr />
+    <div class="right-section d-flex flex-direction-column align-items-center">
       <h2 class="right-title text-align-center">Follow Other Users</h2>
   </div>
   </div>
