@@ -5,12 +5,12 @@
 </h2>
 </div>
 
-<h3 style="text-align:center;color:yellow;font-size:1.8rem;">.</h3>
+
 <p style="text-align:center;font-size:1.5rem;">Mini social media app(like twitter) that lets the user signup, login, and then post anything on their mind.
 </p>
 
 <div align="center">
-  <a href="https://vimeo.com/466051937" target="_blank"><img src="snips/one.png" alt="Twitter Clone"></a>
+  <img src="https://drive.google.com/file/d/1qVf4GLliu14n8Rv-79oaFHXu4lZorggm/view?usp=sharing" alt="Twitter Clone">
 </div>
 
 
