@@ -1,42 +1,41 @@
+/* Feed Main Box */
+
 #feed-main-box{
   box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
   padding:10px;
   justify-content:space-between;
 }
-  .left-section {
-  /*  border: 2px solid red; */
+/* Left Side Pane */
+.left-section {
     width: 60%;
     margin-right: 5%;
     padding: 10px;
-    
-  }
-  .top-post-section{
+}
+.top-post-section{
     padding:10px;
-    /*border:1px solid black; */
     margin-bottom:40px;
     width:72%;
     display:block;
     margin:10px auto;
     box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
-    
-  ;
-  }
-  .left-section input {
+}
+/* Left Section Input Box */
+.left-section input {
     padding: 15px !important;
     height: 60px !important;
     border-radius:40px;
   }
 
-  /* feed Card design */
-  .feed-container {
+ /* feed Card design Section  */
+ 
+.feed-container {
     display:flex;
     flex-direction:column;
     padding: 14px;
-    /*border-right:4px dotted black; */
-   align-items: center;
-  }
-
-  .feed-card {
+    align-items: center;
+}
+/* Feed Card */ 
+.feed-card {
     width: 75%;
     display: flex;
     justify-content: flex-start;
@@ -45,32 +44,27 @@
     margin: 40px 10px;
     min-height: 60px;
     padding:5px 0px 0px;
-    
   }
   .feed-card i{
     font-size:1.2rem;
   }
-
   .feed-card-img {
     margin-top:30px;
     width: 100%;
     max-height: 300px;
   }
-
   .feed-text {
     margin-top:30px;
     text-align: center;
     color: #1B9CFC;
     font-size: 2rem;
   }
-
+  /* Like Section */
   .bottom-section {
     padding: 0px;
     width: 100%;
     margin-top: 40px;
-
   }
-
   .like-btn {
     margin-top: 12%;
     font-size: 1.6rem;
