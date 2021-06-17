@@ -12,7 +12,8 @@
 <div align="center">
   <img src="snips/one.png" alt="Twitter Clone">
 </div>
-<div align="center">
+<h2>Create an Account Using Email Id and Password</h2>
+<div align="center" style="margin-top:40px;">
   <img src="snips/two.png" alt="Twitter Clone">
 </div>
 
@@ -62,7 +63,7 @@ Environment Setup-
 
 * Clone the repository by running command
 ```
-git clone https://github.com/ <your user-name> /jssconnect.git
+git clone https://github.com/ <your user-name> /dsc-final.git
 ```
 in your git bash.
 <br/>
