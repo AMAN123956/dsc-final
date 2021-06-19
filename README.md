@@ -68,7 +68,7 @@ git clone https://github.com/ <your user-name> /dsc-final.git
 in your git bash.
 <br/>
 
-* Run command `cd jssconnect`.
+* Run command `cd dsc-final`.
 <br/>
 
 * Run this command to install all dependencies for the project.
